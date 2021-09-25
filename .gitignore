@@ -1,0 +1,17 @@
+# IDE files
+*.idea
+
+# Gradle
+*.gradle
+
+# Course files
+Topics/
+util/
+
+Recipes/*
+!Recipes/task/
+Recipes/task/out/
+Recipes/task/build/
+
+course-info.yaml
+course-remote-info.yaml
