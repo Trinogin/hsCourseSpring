@@ -12,7 +12,9 @@ import recipes.service.RecipeService;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/recipe")
@@ -32,6 +34,15 @@ public class Controller {
         return new ResponseEntity<>(Map.of("id", savedRecipe.getRecipeId()), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRecipe(@RequestBody @Valid Recipe newRecipe,
+                                          @PathVariable @Max(Long.MAX_VALUE) @Min(0) Long id) {
+        recipeService.updateRecipe(newRecipe, id).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        });
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping("/{id}")
     public Recipe getRecipe(@PathVariable @Max(Long.MAX_VALUE) @Min(0) Long id) {
         return recipeService.findByRecipeId(id).orElseThrow(() -> {
@@ -47,4 +58,19 @@ public class Controller {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/search")
+    public List<Recipe> searchRecipesByCategory(@RequestParam Optional<String> category,
+                                                @RequestParam Optional<String> name) {
+        if (category.isPresent()) {
+            if (name.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            } else {
+                return recipeService.searchRecipesByCategory(category.get());
+            }
+        } else if (name.isPresent()) {
+            return recipeService.searchRecipesByName(name.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

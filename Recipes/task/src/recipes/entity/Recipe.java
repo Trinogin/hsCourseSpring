@@ -6,6 +6,7 @@ import recipes.utils.StringListConverter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -25,6 +26,13 @@ public class Recipe {
     @Column
     @NotBlank
     private String name;
+
+    @Column
+    @NotBlank
+    private String category;
+
+    @Column
+    private LocalDateTime date;
 
     @Column
     @NotBlank
