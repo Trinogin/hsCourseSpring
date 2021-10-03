@@ -1,5 +1,6 @@
 package recipes.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import recipes.utils.StringListConverter;
 
@@ -47,5 +48,10 @@ public class Recipe {
     @Size(min = 1)
     @Convert(converter = StringListConverter.class)
     private List<String> directions;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "usrId", nullable = false)
+    private Usr usr;
 
 }
